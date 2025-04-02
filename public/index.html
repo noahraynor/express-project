@@ -1,14 +1,68 @@
 <!DOCTYPE html>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    let submitButton = document.querySelector('#button');
+    let input = document.querySelector('#input');
+    let refreshButton = document.querySelector('#show-names');
+    let namesUL = document.querySelector('#namesUL');
+    let text;
+
+    submitButton.addEventListener('click', async () => {
+      const text = input.value;
+
+      // Send text to server using POST
+      const res = await fetch('/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name: text }) // send as JSON
+      });
+
+      const data = await res.json();
+
+      input.value = '';
+
+      alert(data.message); // Optional feedback
+    });
+
+    refreshButton.addEventListener('click', async () => {
+
+      const res = await fetch('/receive', {
+        method: 'GET',
+      });
+
+      const data = await res.json();
+
+      displayNames(data.names);
+
+    });
+  });
+
+  function displayNames(names) {
+    namesUL.innerHtml = '';
+    names.forEach(name => {
+      let li = document.createElement('li');
+      li.textContent = name;
+      namesUL.appendChild(li);
+    });
+  }
+
+</script>
+
+
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <title>My Static Site</title>
-</head>
-
-<body>
-  <h1>Hello from my VPS!</h1>
-  <p>This is a simple static HTML page served with NGINX.</p>
-</body>
-
+  <head>
+    <meta charset="UTF-8">
+    <title>My Static Site</title>
+  </head>
+  <body>
+    <h1>Hello from my VPS!</h1>
+    <p>This is a simple static HTML page served with NGINX.</p>
+    <input id="input" type="text" name="username" placeholder="Enter your name" required>
+    <button id="button">Submit</button>
+    <button id="show-names">Refresh Names</button>
+    <ul id="namesUL"></ul>
+  </body>
 </html>
