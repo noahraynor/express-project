@@ -38,16 +38,18 @@
       displayNames(data.names);
 
     });
+
+    function displayNames(names) {
+      namesUL.innerHTML = '';
+      names.forEach(name => {
+        let li = document.createElement('li');
+        li.textContent = name;
+        namesUL.appendChild(li);
+      });
+    }
   });
 
-  function displayNames(names) {
-    namesUL.innerHtml = '';
-    names.forEach(name => {
-      let li = document.createElement('li');
-      li.textContent = name;
-      namesUL.appendChild(li);
-    });
-  }
+
 
 </script>
 
@@ -58,7 +60,7 @@
     <title>My Static Site</title>
   </head>
   <body>
-    <h1>Hello from my VPS!</h1>
+    <h1>Hello from my VPS2!</h1>
     <p>This is a simple static HTML page served with NGINX.</p>
     <input id="input" type="text" name="username" placeholder="Enter your name" required>
     <button id="button">Submit</button>
