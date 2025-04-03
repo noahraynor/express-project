@@ -57,3 +57,26 @@ app.get('/receive', async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch names' });
   }
 });
+
+import collection from './dbMongo.js';
+
+app.post('/submit-mongo', async (req, res) => {
+  const { name } = req.body;
+  try {
+    await collection.insertOne({ name });
+    res.json({ message: 'Name saved to MongoDB!' });
+  } catch (err) {
+    console.error('MongoDB error:', err);
+    res.status(500).json({ message: 'MongoDB insert failed' });
+  }
+});
+
+app.get('/receive-mongo', async (req, res) => {
+  try {
+    const allNames = await collection.find().toArray();
+    res.json(allNames);
+  } catch (err) {
+    console.error('MongoDB fetch error:', err);
+    res.status(500).json({ message: 'Failed to get names from MongoDB' });
+  }
+});

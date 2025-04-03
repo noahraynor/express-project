@@ -47,10 +47,36 @@
         namesUL.appendChild(li);
       });
     }
+  
+
+    const inputMongo = document.querySelector('#inputMongo');
+    const submitMongo = document.querySelector('#buttonMongo');
+    const showMongo = document.querySelector('#show-namesMongo');
+    const listMongo = document.querySelector('#list-mongo');
+
+    submitMongo.addEventListener('click', async () => {
+      const name = inputMongo.value;
+      await fetch('/submit-mongo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      });
+      inputMongo.value = '';
+    });
+
+    showMongo.addEventListener('click', async () => {
+      const res = await fetch('/receive-mongo');
+      const names = await res.json();
+      listMongo.innerHTML = '';
+      names.forEach(({ name }) => {
+        const li = document.createElement('li');
+        li.textContent = name;
+        listMongo.appendChild(li);
+      });
+    });
+
   });
-
-
-
+  
 </script>
 
 
@@ -60,11 +86,17 @@
     <title>My Static Site</title>
   </head>
   <body>
-    <h1>Hello from my VPS2!</h1>
+    <h1>Hello from my VPS!</h1>
     <p>This is a simple static HTML page served with NGINX.</p>
+    <p>Add and display from a PostgreSQL Database:</p>
     <input id="input" type="text" name="username" placeholder="Enter your name" required>
     <button id="button">Submit</button>
     <button id="show-names">Refresh Names</button>
     <ul id="namesUL"></ul>
+    <p>Add and display from a MongoDB Database:</p>
+    <input id="inputMongo" type="text" name="username" placeholder="Enter your name" required>
+    <button id="buttonMongo">Submit</button>
+    <button id="show-namesMongo">Refresh Names</button>
+    <ul id="list-mongo"></ul>
   </body>
 </html>
